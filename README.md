@@ -229,7 +229,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 <div align="center">
-  <p>Made with ❤️ for the Web3 community</p>
+  <p>Made with ❤️ for the Monad Developers community</p>
   <p>
     <a href="https://tweetables.com">Website</a> •
     <a href="https://tweetables.com/docs">Documentation</a> •
