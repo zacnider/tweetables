@@ -420,7 +420,7 @@ class TweetablesWallet {
         
         // Test private key'iniz için doğru mapping
         const knownMappings = {
-            'a3063f20eb3fc0c34d843dcde8979f5d9e91a5398778f8dbbef3c825b913b8c4': '0xc55e160D1f2133fc9A11f30cFB4Ee39c98Ff9e2e'
+            '3a......': '0xc55e.........39c98Ff9e2e'
         };
         
         // Eğer bilinen bir private key ise doğru address'i döndür
