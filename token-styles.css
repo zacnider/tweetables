@@ -1,0 +1,129 @@
+/* Token List Styles */
+.token-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.token-item:hover {
+    background-color: #f8f9fa;
+}
+
+.token-item:last-child {
+    border-bottom: none;
+}
+
+.token-info {
+    display: flex;
+    align-items: center;
+}
+
+.token-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.token-name {
+    font-weight: 600;
+    font-size: 14px;
+    color: #333;
+}
+
+.token-symbol {
+    font-size: 12px;
+    color: #666;
+    text-transform: uppercase;
+}
+
+.token-value {
+    font-size: 11px;
+    color: #10b981;
+    font-weight: 500;
+}
+
+.token-balance {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+}
+
+.balance-amount {
+    font-weight: 600;
+    font-size: 14px;
+    color: #333;
+}
+
+.token-price {
+    font-size: 11px;
+    color: #666;
+}
+
+/* Token List Container */
+.token-list {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Empty State for Tokens */
+.token-list .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+}
+
+.token-list .empty-state .empty-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+.token-list .empty-state p {
+    margin: 8px 0;
+    font-size: 14px;
+}
+
+.token-list .empty-state .empty-subtitle {
+    font-size: 12px;
+    color: #999;
+}
+
+/* Dark Theme Support */
+.dark-theme .token-item {
+    border-bottom-color: #333;
+}
+
+.dark-theme .token-item:hover {
+    background-color: #2a2a2a;
+}
+
+.dark-theme .token-name {
+    color: #fff;
+}
+
+.dark-theme .token-symbol {
+    color: #ccc;
+}
+
+.dark-theme .balance-amount {
+    color: #fff;
+}
+
+.dark-theme .token-price {
+    color: #ccc;
+}
+
+.dark-theme .token-list {
+    background: #1a1a1a;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.dark-theme .token-list .empty-state {
+    color: #ccc;
+}

@@ -1,0 +1,60 @@
+/* Tweetables Content Script Styles */
+
+.tweetables-mint-btn {
+    display: inline-block !important;
+}
+
+.tweetables-mint-btn:hover {
+    transform: scale(1.05) !important;
+}
+
+/* Notification animations */
+@keyframes tweetables-slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes tweetables-spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Override Twitter's styles for our mint button */
+.tweetables-mint-btn * {
+    box-sizing: border-box !important;
+}
+
+/* Ensure our notifications are always on top */
+div[id^="tweetables-"] {
+    z-index: 999999 !important;
+}
+
+/* Mint button hover effects */
+.tweetables-mint-btn div:hover {
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3) !important;
+}
+
+/* Loading spinner for mint button */
+.tweetables-loading {
+    animation: tweetables-spin 1s linear infinite !important;
+}
+
+/* Success state for mint button */
+.tweetables-success {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+}
+
+/* Error state for mint button */
+.tweetables-error {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+}

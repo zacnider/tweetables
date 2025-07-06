@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tweetables Wallet</title>
+    <link rel="stylesheet" href="popup.css">
+    <link rel="stylesheet" href="token-styles.css">
+    <!-- Ethers.js local file for real blockchain transactions -->
+    <script src="ethers.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <img src="images/logo.png" alt="Tweetables" class="logo">
+            <h1>Tweetables</h1>
+            <div class="network-info">
+                <img src="images/purple_logo.png" alt="Monad" class="network-logo">
+                <span>Monad Testnet</span>
+            </div>
+        </div>
+
+        <!-- Wallet Info (shown when wallet exists) -->
+        <div class="wallet-info" id="walletInfo" style="display: none;">
+            <div class="balance">
+                <span class="balance-label">Balance</span>
+                <span class="balance-amount" id="balance">0.00 MON</span>
+            </div>
+            <div class="address" id="walletAddress" title="Click to copy">
+                <span>Loading...</span>
+            </div>
+        </div>
+
+        <!-- Action Buttons (shown when wallet exists) -->
+        <div class="action-buttons" id="actionButtons" style="display: none;">
+            <button class="action-btn" id="receiveBtn">
+                <span class="btn-icon">📥</span>
+                <span>Receive</span>
+            </button>
+            <button class="action-btn" id="sendBtn">
+                <span class="btn-icon">📤</span>
+                <span>Send</span>
+            </button>
+            <button class="action-btn" id="swapBtn">
+                <span class="btn-icon">🔄</span>
+                <span>Swap</span>
+            </button>
+            
+            <button class="action-btn" id="twitterMintBtn">
+                <span class="btn-icon">🐦</span>
+                <span>Open Twitter</span>
+            </button>
+        </div>
+
+        <!-- Tab Navigation (shown when wallet exists) -->
+        <div class="tab-navigation" id="tabNavigation" style="display: none;">
+            <button class="tab-btn active" data-tab="nft">NFT</button>
+            <button class="tab-btn" data-tab="tokens">Tokens</button>
+            <button class="tab-btn" data-tab="activity">Activity</button>
+            <button class="tab-btn" data-tab="leaderboard">Leaderboard</button>
+            <button class="tab-btn" data-tab="settings">⚙️</button>
+        </div></search>
+</search_and_replace>
+
+        <!-- Tab Content (shown when wallet exists) -->
+        <div class="tab-content" id="tabContent" style="display: none;">
+            <!-- NFT Tab -->
+            <div class="tab-pane active" id="nft-tab">
+                <div class="nft-grid" id="nftGrid">
+                    <div class="empty-state">
+                        <img src="images/mint.png" alt="NFT" class="empty-icon">
+                        <p>No NFTs yet</p>
+                        <p class="empty-subtitle">Start by minting tweets from Twitter!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tokens Tab -->
+            <div class="tab-pane" id="tokens-tab">
+                <div class="tokens-header">
+                    <button class="add-token-btn-tab" id="addTokenBtnTab">+ Add Token</button>
+                </div>
+                <div class="token-list" id="tokenList">
+                    <div class="token-item">
+                        <div class="token-info">
+                            <img src="images/purple_logo.png" alt="MON" class="token-icon">
+                            <div class="token-details">
+                                <span class="token-name">Monad</span>
+                                <span class="token-symbol">MON</span>
+                            </div>
+                        </div>
+                        <div class="token-balance" id="monBalance">0.00</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity Tab -->
+            <div class="tab-pane" id="activity-tab">
+                <div class="activity-list" id="activityList">
+                    <div class="empty-state">
+                        <p>No transaction history yet</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Leaderboard Tab -->
+            <div class="tab-pane" id="leaderboard-tab">
+                <div class="leaderboard-header">
+                    <h3>Most Minted Twitter Users</h3>
+                </div>
+                <div class="leaderboard-list" id="leaderboardList">
+                    <div class="empty-state">
+                        <p>Loading leaderboard...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div class="tab-pane" id="settings-tab">
+                <div class="settings-section">
+                    <h3 style="margin-bottom: 16px; color: #333;">Wallet Settings</h3>
+                    
+                    <!-- Wallet Info Section -->
+                    <div class="settings-group">
+                        <h4>Wallet Information</h4>
+                        <div class="setting-item">
+                            <label>Seed Phrase</label>
+                            <div class="copy-field">
+                                <input type="password" id="settingsSeedPhrase" readonly>
+                                <button class="copy-btn small" id="copySettingsSeedBtn">Copy</button>
+                                <button class="toggle-btn small" id="toggleSettingsSeedBtn">👁️</button>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <label>Private Key</label>
+                            <div class="copy-field">
+                                <input type="password" id="settingsPrivateKey" readonly>
+                                <button class="copy-btn small" id="copySettingsPrivateBtn">Copy (0x)</button>
+                                <button class="copy-btn small" id="copySettingsPrivateNoPrefix">Copy (raw)</button>
+                                <button class="toggle-btn small" id="toggleSettingsPrivateBtn">👁️</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Theme Settings -->
+                    <div class="settings-group">
+                        <h4>Appearance</h4>
+                        <div class="setting-item">
+                            <label>Theme</label>
+                            <select id="themeSelect" class="settings-select">
+                                <option value="light">Light Theme</option>
+                                <option value="dark">Dark Theme</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Network Settings -->
+                    <div class="settings-group">
+                        <h4>Network Settings</h4>
+                        <div class="setting-item">
+                            <label>RPC URL</label>
+                            <div class="rpc-field">
+                                <input type="text" id="customRpcUrl" placeholder="https://testnet-rpc.monad.xyz">
+                                <button class="settings-btn" id="saveRpcBtn">Save</button>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <label>Chain ID</label>
+                            <input type="number" id="customChainId" placeholder="10143" readonly>
+                        </div>
+                        <div class="setting-item">
+                            <label>Explorer URL</label>
+                            <input type="text" id="customExplorerUrl" placeholder="https://testnet.monadexplorer.com">
+                        </div>
+                        <button class="settings-btn" id="resetNetworkBtn">Reset to Default</button>
+                    </div>
+
+                    <!-- Security Settings -->
+                    <div class="settings-group">
+                        <h4>Security</h4>
+                        <div class="setting-item">
+                            <button class="danger-btn" id="exportWalletBtn">Export Wallet Data</button>
+                        </div>
+                        <div class="setting-item">
+                            <button class="danger-btn" id="clearWalletBtn">Clear Wallet Data</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div></search>
+</search_and_replace>
+
+        <!-- Wallet Setup Section (shown when no wallet) -->
+        <div class="wallet-setup" id="walletSetup">
+            <div class="wallet-setup-buttons">
+                <button class="wallet-btn create-wallet-btn" id="createWalletBtn">
+                    Create New Wallet
+                </button>
+                <button class="wallet-btn import-wallet-btn" id="importWalletBtn">
+                    Import Existing Wallet
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Create Wallet Modal -->
+    <div class="modal" id="createWalletModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create New Wallet</h3>
+                <button class="close-btn" data-modal="createWalletModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="text-align: center; padding: 20px;">
+                    <div style="color: #10b981; font-size: 48px; margin-bottom: 16px;">🔄</div>
+                    <h4 style="color: #333; margin-bottom: 16px;">Creating Your Wallet...</h4>
+                    <p style="color: #666; margin-bottom: 16px;">
+                        Your wallet is being created with secure 16-byte entropy using Ethers.js
+                    </p>
+                    <div style="background: rgba(102, 126, 234, 0.1); padding: 12px; border-radius: 8px; margin: 16px 0;">
+                        <p style="font-size: 12px; color: #667eea; margin: 0;">
+                            ℹ️ Your seed phrase and private key will be available in the Settings tab after creation.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Wallet Modal -->
+    <div class="modal" id="importWalletModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Import Wallet</h3>
+                <button class="close-btn" data-modal="importWalletModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="import-tabs">
+                    <button class="import-tab-btn active" data-import-tab="seed">Seed Phrase</button>
+                    <button class="import-tab-btn" data-import-tab="private">Private Key</button>
+                </div>
+                
+                <div class="import-tab-content">
+                    <!-- Seed Phrase Import -->
+                    <div class="import-tab-pane active" id="seed-import">
+                        <div class="form-group">
+                            <label>Seed Phrase (12 words)</label>
+                            <textarea id="importSeedPhrase" placeholder="Enter your 12-word seed phrase separated by spaces" rows="3"></textarea>
+                        </div>
+                        <button class="confirm-btn" id="importSeedConfirmBtn">Import with Seed Phrase</button>
+                    </div>
+                    
+                    <!-- Private Key Import -->
+                    <div class="import-tab-pane" id="private-import">
+                        <div class="form-group">
+                            <label>Private Key</label>
+                            <input type="password" id="importPrivateKey" placeholder="Enter your private key (0x...)">
+                            <button class="toggle-btn small" id="toggleImportPrivateKeyBtn" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%);">👁️</button>
+                        </div>
+                        <button class="confirm-btn" id="importPrivateConfirmBtn">Import with Private Key</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Receive Modal -->
+    <div class="modal" id="receiveModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Receive MON</h3>
+                <button class="close-btn" data-modal="receiveModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="qr-code" id="qrCode">
+                    <div class="qr-placeholder">
+                        QR Code will appear here
+                    </div>
+                </div>
+                <div class="address-display">
+                    <input type="text" id="receiveAddress" readonly>
+                    <button class="copy-btn" id="copyReceiveAddressBtn">Copy</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Send Modal -->
+    <div class="modal" id="sendModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Send MON</h3>
+                <button class="close-btn" data-modal="sendModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Recipient Address</label>
+                    <input type="text" id="sendToAddress" placeholder="0x...">
+                </div>
+                <div class="form-group">
+                    <label>Amount (MON)</label>
+                    <input type="number" id="sendAmount" placeholder="0.00" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label>Gas Limit</label>
+                    <input type="number" id="gasLimit" value="200000" min="21000" max="500000">
+                </div>
+                <div class="form-group">
+                    <label>Gas Price (Gwei)</label>
+                    <input type="number" id="gasPrice" value="54" min="1" max="1000" step="0.1">
+                </div>
+                <div class="form-group">
+                    <label>Estimated Gas Fee</label>
+                    <input type="text" id="gasFee" readonly value="~0.0108 MON">
+                </div>
+                <button class="send-btn" id="confirmSendBtn">Send</button>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <!-- Swap Modal -->
+    <div class="modal" id="swapModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Swap Tokens</h3>
+                <button class="close-btn" data-modal="swapModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- From Token Section -->
+                <div class="swap-section">
+                    <div class="swap-label">From</div>
+                    <div class="swap-input-container">
+                        <div class="swap-token-selector" id="fromTokenSelector">
+                            <span class="token-symbol">MON</span>
+                            <span class="dropdown-arrow">▼</span>
+                        </div>
+                        <div class="swap-amount-container">
+                            <input type="number" id="fromAmount" placeholder="0.0" step="0.000001" min="0">
+                            <div class="amount-buttons">
+                                <button class="amount-btn" data-percentage="25">25%</button>
+                                <button class="amount-btn" data-percentage="50">50%</button>
+                                <button class="amount-btn" data-percentage="75">75%</button>
+                                <button class="amount-btn" data-percentage="100">MAX</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="token-balance">Balance: <span id="fromTokenBalance">0.0000</span></div>
+                </div>
+
+                <!-- Swap Direction Button -->
+                <div class="swap-direction">
+                    <button class="swap-direction-btn" id="swapDirectionBtn">⇅</button>
+                </div>
+
+                <!-- To Token Section -->
+                <div class="swap-section">
+                    <div class="swap-label">To</div>
+                    <div class="swap-input-container">
+                        <div class="swap-token-selector" id="toTokenSelector">
+                            <span class="token-symbol">Select Token</span>
+                            <span class="dropdown-arrow">▼</span>
+                        </div>
+                        <div class="swap-amount-container">
+                            <input type="number" id="toAmount" placeholder="0.0" readonly>
+                        </div>
+                    </div>
+                    <div class="token-balance">Balance: <span id="toTokenBalance">0.0000</span></div>
+                </div>
+
+                <!-- Slippage Settings -->
+                <div class="slippage-section">
+                    <div class="slippage-header">
+                        <span>Slippage Tolerance</span>
+                        <button class="slippage-settings-btn" id="slippageSettingsBtn">⚙️</button>
+                    </div>
+                    <div class="slippage-controls" id="slippageControls" style="display: none;">
+                        <div class="slippage-presets">
+                            <button class="slippage-btn active" data-slippage="0.1">0.1%</button>
+                            <button class="slippage-btn" data-slippage="0.5">0.5%</button>
+                            <button class="slippage-btn" data-slippage="1.0">1.0%</button>
+                            <button class="slippage-btn" data-slippage="3.0">3.0%</button>
+                        </div>
+                        <div class="custom-slippage">
+                            <input type="number" id="customSlippage" placeholder="Custom %" step="0.1" min="0.1" max="50">
+                        </div>
+                    </div>
+                    <div class="current-slippage">Current: <span id="currentSlippage">0.1%</span></div>
+                </div>
+
+                <!-- Swap Info -->
+                <div class="swap-info" id="swapInfo" style="display: none;">
+                    <div class="swap-info-row">
+                        <span>Rate</span>
+                        <span id="swapRate">-</span>
+                    </div>
+                    <div class="swap-info-row">
+                        <span>Minimum Received</span>
+                        <span id="minimumReceived">-</span>
+                    </div>
+                    <div class="swap-info-row">
+                        <span>Price Impact</span>
+                        <span id="priceImpact">-</span>
+                    </div>
+                    <div class="swap-info-row">
+                        <span>Gas Fee</span>
+                        <span id="swapGasFee">~0.005 MON</span>
+                    </div>
+                </div>
+
+                <!-- Swap Button -->
+                <button class="swap-confirm-btn" id="swapConfirmBtn" disabled>
+                    Select tokens to swap
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Token Selection Modal -->
+    <div class="modal" id="tokenSelectionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Select Token</h3>
+                <button class="close-btn" data-modal="tokenSelectionModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Add Token Button -->
+                <div class="add-token-section">
+                    <button class="add-token-btn" id="addTokenBtn">+ Add Custom Token</button>
+                </div>
+                
+                <!-- Token List -->
+                <div class="token-selection-list" id="tokenSelectionList">
+                    <!-- Tokens will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Token Modal -->
+    <div class="modal" id="addTokenModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Custom Token</h3>
+                <button class="close-btn" data-modal="addTokenModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Contract Address</label>
+                    <input type="text" id="tokenContractAddress" placeholder="0x...">
+                </div>
+                <div class="form-group">
+                    <label>Token Symbol</label>
+                    <input type="text" id="tokenSymbol" placeholder="e.g. USDC">
+                </div>
+                <div class="form-group">
+                    <label>Decimals</label>
+                    <input type="number" id="tokenDecimals" placeholder="18" min="0" max="18">
+                </div>
+                <div class="form-group">
+                    <label>Token Name (Optional)</label>
+                    <input type="text" id="tokenName" placeholder="e.g. USD Coin">
+                </div>
+                <button class="confirm-btn" id="addTokenConfirmBtn">Add Token</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- NFT Detail Modal -->
+    <div class="modal" id="nftModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>NFT Details</h3>
+                <button class="close-btn" data-modal="nftModal">&times;</button>
+            </div>
+            <div class="modal-body" id="nftModalBody">
+                <!-- NFT details will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

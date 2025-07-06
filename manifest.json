@@ -1,0 +1,58 @@
+{
+  "manifest_version": 3,
+  "name": "Tweetables",
+  "version": "1.0.0",
+  "description": "Built-in crypto wallet for minting Twitter tweets as NFTs on Monad Testnet",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting",
+    "tabs",
+    "notifications",
+    "windows",
+    "system.display"
+  ],
+  "host_permissions": [
+    "https://twitter.com/*",
+    "https://x.com/*",
+    "https://api.pinata.cloud/*",
+    "https://testnet-rpc.monad.xyz/*",
+    "https://monad-testnet.drpc.org/*",
+    "https://cdn.ethers.io/*",
+    "https://api.qrserver.com/*",
+    "https://api.blockvision.org/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Tweetables Wallet",
+    "default_icon": {
+      "16": "images/logo.png",
+      "32": "images/logo.png",
+      "48": "images/logo.png",
+      "128": "images/logo.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://twitter.com/*", "https://x.com/*"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_end"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "images/logo.png",
+    "32": "images/logo.png",
+    "48": "images/logo.png",
+    "128": "images/logo.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["images/*", "ethers.min.js"],
+      "matches": ["https://twitter.com/*", "https://x.com/*"]
+    }
+  ]
+}
