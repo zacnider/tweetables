@@ -107,7 +107,7 @@ tweetables/
 ### Network Settings
 - **Network**: Monad Testnet
 - **RPC URL**: `https://testnet-rpc.monad.xyz`
-- **Chain ID**: `41454`
+- **Chain ID**: `10143`
 - **Currency**: `MON`
 
 ### Environment Variables
