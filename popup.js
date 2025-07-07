@@ -1,4 +1,4 @@
-// Tweetables Wallet - Real Crypto Wallet Implementation
+// Tweetables Wallet - Real Crypto Wallet
 class TweetablesWallet {
     constructor() {
         this.wallet = null;
